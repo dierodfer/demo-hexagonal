@@ -1,5 +1,7 @@
 # Project 
 
+A demo hexagonal project + api-first + mapstruct
+
 ## Requirements
 - JDK >= 11
 - Maven
