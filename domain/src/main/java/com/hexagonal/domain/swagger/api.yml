@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: Swagger - OpenAPI 3.0
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: transaction
+    description: Transactions about demo
+paths:
+  /transaction:
+    post:
+      tags:
+        - transaction
+      summary: Create user
+      operationId: createTransaction
+      requestBody:
+        description: Transaction request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          description: successful operation
+    get:
+      tags:
+        - transaction
+      summary: Search Transactions
+      operationId: searchTransactions
+      parameters:
+        - $ref: '#/components/parameters/iban'
+        - $ref: '#/components/parameters/amountSort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  /transaction/status:
+    get:
+      tags:
+        - transaction
+      summary: Status Transaction
+      operationId: statusTransaction
+      requestBody:
+        required: true
+        description: Status request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusTransactionRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/StatusTransactionResponse'
+components:
+  parameters:
+    iban:
+        name: account_iban
+        in: query
+        description: The IBAN number of the account where the transaction has happened.
+        required: true
+        schema:
+          type: string
+          example: ES9820385778983000760236
+    amountSort:
+        name: sort
+        in: query
+        description: The IBAN number of the account where the transaction has happened.
+        required: true
+        schema:
+          $ref: '#/components/schemas/SortEnum'
+  schemas:
+    Transaction:
+      required:
+        - account_iban
+        - amount
+      type: object
+      properties:
+        reference: 
+          type: string
+          example: 12345A
+        account_iban: 
+          type: string
+          example: ES9820385778983000760236
+        date: 
+          type: string
+          format: date-time
+          example: 2019-07-16T16:55:42.000Z
+        amount: 
+          type: number
+          format: double
+          example: 193.38
+        fee: 
+          type: number
+          format: double
+          example: 3.18
+        description: 
+          type: string
+          example: Restaurant payment
+    StatusTransactionRequest:
+      type: object
+      required:
+        - reference
+      properties:
+        reference: 
+          type: string
+          example: 12345A
+        channel: 
+          $ref: '#/components/schemas/ChannelEnum'
+    StatusTransactionResponse:
+      type: object
+      properties:
+        reference: 
+          type: string
+          example: 12345A
+        status: 
+          $ref: '#/components/schemas/StatusEnum'
+        amount: 
+          type: number
+          format: double
+          example: 193.38
+        fee: 
+          type: number
+          format: double
+          example: 3.18
+    SortEnum:
+      type: string
+      description: sort list
+      enum:
+        - ASC
+        - DES
+      example: DES
+    ChannelEnum:
+      type: string
+      description: type of channel
+      enum:
+        - CLIENT
+        - ATM
+        - INTERNAL
+      example: CLIENT
+    StatusEnum:
+      type: string
+      description: type of status
+      enum:
+        - PENDING
+        - SETTLED
+        - FUTURE
+        - INVALID
+      example: PENDING

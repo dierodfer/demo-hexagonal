@@ -1,0 +1,1 @@
+INSERT INTO EXAMPLE VALUES (1, 'name', 'Lorem ipsum dolor sit amet.description');

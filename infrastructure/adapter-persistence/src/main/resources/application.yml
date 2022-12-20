@@ -1,0 +1,12 @@
+spring:
+  output.ansi.enabled: ALWAYS
+  h2.console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:demo
+    driverClassName: org.h2.Driver
+    username: sa
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    generate-ddl: true
+    hibernate.ddl-auto: create-drop
